@@ -7,6 +7,7 @@ Release:	1
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
+# Source0-md5:	6ee51e69838c826c4ed8fd42ef12cc59
 Source1:	%{name}.desktop
 Source2:	%{name}.png
 Patch0:		%{name}-configure.patch
