@@ -11,4 +11,5 @@ Icon=jpilot.png
 Exec=jpilot
 Terminal=false
 Type=Application
+Categories=GTK;Office;X-PIM;
 # vi: encoding=utf-8
