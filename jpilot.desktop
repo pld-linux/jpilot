@@ -8,6 +8,6 @@ Comment[pt]=Software para interação com o Pilot
 Comment[pt_BR]=Software para interação com o Pilot
 Icon=jpilot.png
 Exec=jpilot
-Terminal=0
+Terminal=false
 Type=Application
 # vi: encoding=utf-8
