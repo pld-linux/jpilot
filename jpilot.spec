@@ -2,8 +2,8 @@ Summary:	Jpilot - Palm Pilot desktop software
 Summary(pl):	Program zarz±dzania Palm Pilot'em
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
-Version:	0.99
-Release:	8
+Version:	0.99.3
+Release:	1
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
@@ -13,7 +13,6 @@ URL:		http://jpilot.org/
 BuildRequires:	gettext-devel
 BuildRequires:	gtk+-devel >= 1.2.0
 BuildRequires:	pilot-link-devel
-ExcludeArch:	s390 s390x
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr/X11R6
@@ -37,7 +36,12 @@ Um software para interação com o Pilot.
 
 %build
 %{__gettextize}
+%{__libtoolize}
+aclocal
+%{__autoconf}
+%{__automake}
 %configure
+
 %{__make}
 %{__make} jpilot-dump
 %{__make} libplugin
@@ -69,8 +73,6 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/X11/applnk/Applications/jpilot.
 #install man pages
 install docs/jpilot*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
-gzip -9nf BUGS README TODO CREDITS
-
 %find_lang %{name}
 
 %clean
@@ -81,7 +83,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc *.gz
+%doc BUGS README TODO CREDITS
 %attr(755,root,root) %{_bindir}/*
 %{_datadir}/jpilot
 %{_libdir}/%{name}
