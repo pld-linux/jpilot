@@ -1,0 +1,12 @@
+diff -uNr jpilot-0.99.3.orig/configure.in jpilot-0.99.3/configure.in
+--- jpilot-0.99.3.orig/configure.in	Thu Oct  3 17:47:57 2002
++++ jpilot-0.99.3/configure.in	Wed Oct  9 09:30:37 2002
+@@ -377,7 +377,7 @@
+ 
+ 
+ AC_OUTPUT(Makefile docs/Makefile Expense/Makefile KeyRing/Makefile
+-	m4/Makefile intl/Makefile po/Makefile.in
++	m4/Makefile intl/Makefile
+ 	SyncTime/Makefile po/Makefile.in jpilot.spec
+ 	SlackBuild)
+ #
