@@ -1,21 +1,23 @@
 Summary:	Jpilot - Palm Pilot desktop software
-Summary(pl):	Program zarz±dzania Palm Pilotem
+Summary(pl):	Program zarz±dzania Palm Pilot'em
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.3
-Release:	2
+Release:	1
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}.png
+Patch0:		%{name}-configure.patch
+Patch1:		%{name}-makefile.patch
 URL:		http://jpilot.org/
-BuildRequires:	autoconf
-BuildRequires:	automake
 BuildRequires:	gettext-devel
 BuildRequires:	gtk+-devel >= 1.2.0
+BuildRequires:	pilot-link-devel >= 0.11.5
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libtool
-BuildRequires:	pilot-link-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr/X11R6
@@ -28,47 +30,32 @@ distributes for a well known rampant legacy operating system.
 
 %description -l pl
 J-Pilot jest programem do zarz±dzania organizerami typu Palm Pilot dla
-Linuksa z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
-funkcjonalno¶æ do oryginalnego oprogramowania 3coma dla Palm Pilota.
+Linux'a z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
+funkcjonalno¶æ do oryginalnego oprogramowania 3com'a dla Palm Pilota.
 
 %description -l pt_BR
 Um software para interação com o Pilot.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 %{__gettextize}
 %{__libtoolize}
-%{__aclocal}
+aclocal
 %{__autoconf}
 %{__automake}
 %configure
 
-%{__make}
-%{__make} jpilot-dump
-%{__make} libplugin
-
-cd Expense
-%configure
-%{__make}
-
-cd ../SyncTime
-%configure
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_datadir},%{_mandir}/man1}
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
-
-%{__make} install -C Expense \
-	DESTDIR=$RPM_BUILD_ROOT
-
-%{__make} install -C SyncTime \
-	DESTDIR=$RPM_BUILD_ROOT
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install -d ${RPM_BUILD_ROOT}%{_sysconfdir}/X11/applnk/Applications
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/X11/applnk/Applications/jpilot.desktop
@@ -86,8 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc BUGS README TODO CREDITS
+%doc AUTHORS BUGS UPGRADING README TODO icons docs/{*.png,*.jpg,*.html}
 %attr(755,root,root) %{_bindir}/*
 %{_datadir}/jpilot
+%{_mandir}/man1/*
 %{_libdir}/%{name}
 %config(noreplace) %{_sysconfdir}/X11/applnk/Applications/jpilot.desktop
