@@ -7,7 +7,7 @@ Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.7
-Release:	2
+Release:	3
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
@@ -49,6 +49,7 @@ mv -f po/{no,nb}.po
 rm -f po/stamp-po
 
 %{__perl} -pi -e 's@pilot_prefix/lib /usr/lib@pilot_prefix/%{_lib} /usr/%{_lib}@' configure.in
+%{__perl} -pi -e 's@/lib/jpilot/plugins@/%{_lib}/jpilot/plugins@' */Makefile.am
 
 %build
 %{?with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK_2_0],[$3])' >> acinclude.m4}
@@ -59,6 +60,7 @@ rm -f po/stamp-po
 %{__autoconf}
 %{__automake}
 %configure \
+	ABILIB="%{_lib}" \
 	%{!?with_gtk1:--enable-gtk2}
 
 %{__make}
