@@ -14,8 +14,8 @@ Source0:	http://downloads.jpilot.org/%{name}-%{version}.tar.gz
 # Source0-md5:	1572138321ce6759c65ecf83b8c84ef4
 Source1:	%{name}.desktop
 Source2:	%{name}.png
-Patch0:		%{name}-configure.patch
-Patch1:		%{name}-makefile.patch
+#Patch0:		%{name}-configure.patch
+#Patch1:		%{name}-makefile.patch
 URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -44,8 +44,8 @@ Um software para interação com o Pilot.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+#%patch0 -p1
+#%patch1 -p1
 
 %build
 rm -f missing
@@ -84,7 +84,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS BUGS UPGRADING README TODO icons docs/{*.png,*.jpg,*.html}
 %attr(755,root,root) %{_bindir}/*
-%{_datadir}/jpilot
+#%{_datadir}/jpilot
 %{_mandir}/man1/*
 %{_libdir}/%{name}
 %{_applnkdir}/Utilities/jpilot.desktop
