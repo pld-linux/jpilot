@@ -42,6 +42,7 @@ Um software para interação com o Pilot.
 %patch1 -p1
 
 %build
+rm -f missinf
 %{__gettextize}
 %{__libtoolize}
 %{__aclocal}
