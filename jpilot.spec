@@ -25,6 +25,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
+BuildRequires:	readline-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
