@@ -46,6 +46,9 @@ Um software para interação com o Pilot.
 %patch0 -p1
 
 mv -f po/{no,nb}.po
+rm -f po/stamp-po
+
+%{__perl} -pi -e 's@pilot_prefix/lib@pilot_prefix/%{_lib}@' configure.in
 
 %build
 %{?with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK_2_0],[$3])' >> acinclude.m4}
