@@ -1,12 +1,11 @@
-diff -uNr jpilot-0.99.3.orig/configure.in jpilot-0.99.3/configure.in
---- jpilot-0.99.3.orig/configure.in	Thu Oct  3 17:47:57 2002
-+++ jpilot-0.99.3/configure.in	Wed Oct  9 09:30:37 2002
-@@ -377,7 +377,7 @@
+--- jpilot-0.99.5/configure.in.orig	2003-04-20 15:27:15.000000000 +0200
++++ jpilot-0.99.5/configure.in	2003-04-20 15:29:43.000000000 +0200
+@@ -468,7 +468,7 @@
+ AM_CONDITIONAL(MAKE_EXPENSE, test x$plugin_support = xyes)
+ AM_CONDITIONAL(MAKE_SYNCTIME, test x$plugin_support = xyes)
  
+-AC_OUTPUT(Makefile docs/Makefile Expense/Makefile KeyRing/Makefile intl/Makefile dialer/Makefile po/Makefile.in SyncTime/Makefile jpilot.spec SlackBuild)
++AC_OUTPUT(Makefile docs/Makefile Expense/Makefile KeyRing/Makefile intl/Makefile dialer/Makefile SyncTime/Makefile po/Makefile.in jpilot.spec SlackBuild)
  
- AC_OUTPUT(Makefile docs/Makefile Expense/Makefile KeyRing/Makefile
--	m4/Makefile intl/Makefile po/Makefile.in
-+	m4/Makefile intl/Makefile
- 	SyncTime/Makefile po/Makefile.in jpilot.spec
- 	SlackBuild)
- #
+ chmod +x SlackBuild
+ 
