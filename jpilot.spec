@@ -24,6 +24,7 @@ BuildRequires:	gettext-devel
 %{!?_with_gtk1:BuildRequires:  gtk+2-devel >= 2.0.3}
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
+BuildRequires:	XFree86-xrender-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
