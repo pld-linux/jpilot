@@ -1,5 +1,5 @@
 Summary:	Jpilot - Palm Pilot desktop software
-Summary(pl):	Program zarz±dzania Palm Pilot'em
+Summary(pl):	Program do zarz±dzania Palm Pilotem
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.3
@@ -12,12 +12,12 @@ Source2:	%{name}.png
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-makefile.patch
 URL:		http://jpilot.org/
-BuildRequires:	gettext-devel
-BuildRequires:	gtk+-devel >= 1.2.0
-BuildRequires:	pilot-link-devel >= 0.11.5
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	gettext-devel
+BuildRequires:	gtk+-devel >= 1.2.0
 BuildRequires:	libtool
+BuildRequires:	pilot-link-devel >= 0.11.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr/X11R6
@@ -30,8 +30,8 @@ distributes for a well known rampant legacy operating system.
 
 %description -l pl
 J-Pilot jest programem do zarz±dzania organizerami typu Palm Pilot dla
-Linux'a z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
-funkcjonalno¶æ do oryginalnego oprogramowania 3com'a dla Palm Pilota.
+Linuksa z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
+funkcjonalno¶æ do oryginalnego oprogramowania 3coma dla Palm Pilota.
 
 %description -l pt_BR
 Um software para interação com o Pilot.
@@ -44,7 +44,7 @@ Um software para interação com o Pilot.
 %build
 %{__gettextize}
 %{__libtoolize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 %{__automake}
 %configure
