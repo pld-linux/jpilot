@@ -1,5 +1,7 @@
+#
 # Conditional build:
-# _without_gtk2        - without GTK+2 support
+# _with_gtk1	- use GTK+ 1.2 instead of GTK+2
+#
 Summary:	Desktop organizer application for PalmOS devices
 Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
@@ -18,12 +20,11 @@ URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
-BuildRequires:	gtk+-devel >= 1.2.0
-BuildRequires:  gtk+2-devel >= 2.0.3
+%{?_with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
+%{!?_with_gtk1:BuildRequires:  gtk+2-devel >= 2.0.3}
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
 
 %description
 J-Pilot is a desktop organizer application for the PalmOS devices that
@@ -45,13 +46,15 @@ Um software para interação com o Pilot.
 
 %build
 rm -f missing
+%{?_with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK_2_0],[$3])' >> acinclude.m4}
+%{!?_with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK],[$3])' >> acinclude.m4}
 %{__gettextize}
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__automake}
 %configure \
-	%{!?_without_gtk2: --enable-gtk2}
+	%{!?_with_gtk1:--enable-gtk2}
 
 %{__make}
 
