@@ -1,8 +1,8 @@
-Summary:	Jpilot - Palm Pilot desktop software
-Summary(pl):	Program do zarz±dzania Palm Pilotem
+Summary:	Desktop organizer application for PalmOS devices
+Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
-Version:	0.99.3
+Version:	0.99.5
 Release:	1
 License:	GPL
 Group:		X11/Applications
@@ -22,14 +22,14 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 
 %description
-J-Pilot is a desktop organizer application for the palm pilot that
-runs under Linux. t is similar in functionality to the one that 3com
-distributes for a well known rampant legacy operating system.
+J-Pilot is a desktop organizer application for the PalmOS devices that
+runs under Linux with plugins support. It is similar in functionality 
+to the original Palm Desktop software.
 
 %description -l pl
-J-Pilot jest programem do zarz±dzania organizerami typu Palm Pilot dla
-Linuksa z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
-funkcjonalno¶æ do oryginalnego oprogramowania 3coma dla Palm Pilota.
+J-Pilot jest programem do zarz±dzania urz±dzeniami PalmOS dla Linuksa
+z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on± funkcjonalno¶æ do
+oryginalnego oprogramowania Palm Desktop.
 
 %description -l pt_BR
 Um software para interação com o Pilot.
