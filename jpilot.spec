@@ -16,7 +16,7 @@ URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
-BuildRequires:	gtk+2-devel
+BuildRequires:	gtk+-devel >= 1.2.0
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
