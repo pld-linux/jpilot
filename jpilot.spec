@@ -21,7 +21,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
 %{?_with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
-%{!?_with_gtk1:BuildRequires:  gtk+2-devel >= 2.0.3}
+%{!?_with_gtk1:BuildRequires:	gtk+2-devel >= 2.0.3}
 BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	openssl-devel
