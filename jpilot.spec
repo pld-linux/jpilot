@@ -24,7 +24,6 @@ BuildRequires:	gettext-devel
 %{!?_with_gtk1:BuildRequires:  gtk+2-devel >= 2.0.3}
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
-BuildRequires:	XFree86-xrender-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -65,8 +64,7 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_datadir},%{_mandir}/man1}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-install -d ${RPM_BUILD_ROOT}%{_sysconfdir}/X11/applnk/Applications
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/X11/applnk/Applications/jpilot.desktop
+install -D %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Utilities/jpilot.desktop
 
 #install man pages
 install docs/jpilot*.1 $RPM_BUILD_ROOT%{_mandir}/man1
@@ -86,4 +84,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/jpilot
 %{_mandir}/man1/*
 %{_libdir}/%{name}
-%config(noreplace) %{_sysconfdir}/X11/applnk/Applications/jpilot.desktop
+%{_applnkdir}/Utilities/jpilot.desktop
