@@ -1,27 +1,26 @@
 #
 # Conditional build:
-# _with_gtk1	- use GTK+ 1.2 instead of GTK+2
+%bcond_with	gtk1	# use GTK+ 1.2 instead of GTK+2
 #
 Summary:	Desktop organizer application for PalmOS devices
 Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.7
-Release:	1
+Release:	2
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
 # Source0-md5:	11bb7236702e2e4c7e3d06372bdc9695
 Source1:	%{name}.desktop
 Source2:	%{name}.png
-#Patch0:		%{name}-configure.patch
-#Patch1:		%{name}-makefile.patch
+Patch0:		%{name}-locale-names.patch
 URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
-%{?_with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
-%{!?_with_gtk1:BuildRequires:	gtk+2-devel >= 2.0.3}
+%{?with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
+%{!?with_gtk1:BuildRequires:	gtk+2-devel >= 2.0.3}
 BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -44,33 +43,33 @@ Um software para interação com o Pilot.
 
 %prep
 %setup -q
-#%patch0 -p1
-#%patch1 -p1
+%patch0 -p1
+
+mv -f po/{no,nb}.po
 
 %build
-rm -f missing
-%{?_with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK_2_0],[$3])' >> acinclude.m4}
-%{!?_with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK],[$3])' >> acinclude.m4}
+%{?with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK_2_0],[$3])' >> acinclude.m4}
+%{!?with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK],[$3])' >> acinclude.m4}
 %{__gettextize}
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__automake}
 %configure \
-	%{!?_with_gtk1:--enable-gtk2}
+	%{!?with_gtk1:--enable-gtk2}
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_datadir},%{_mandir}/man1}
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-install -D %{SOURCE1} $RPM_BUILD_ROOT%{_applnkdir}/Utilities/jpilot.desktop
+install -D %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/jpilot.desktop
 
-#install man pages
-install docs/jpilot*.1 $RPM_BUILD_ROOT%{_mandir}/man1
+# plugins are dlopened by *.so
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/*.la
 
 %find_lang %{name}
 
@@ -84,7 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS BUGS UPGRADING README TODO icons docs/{*.png,*.jpg,*.html}
 %attr(755,root,root) %{_bindir}/*
+%dir %{_libdir}/%{name}
+%dir %{_libdir}/%{name}/plugins
+%attr(755,root,root) %{_libdir}/%{name}/plugins/*.so*
 #%{_datadir}/jpilot
 %{_mandir}/man1/*
-%{_libdir}/%{name}
-%{_applnkdir}/Utilities/jpilot.desktop
+%{_desktopdir}/jpilot.desktop
