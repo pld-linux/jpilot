@@ -1,9 +1,11 @@
+# Conditional build:
+# _without_gtk2        - without GTK+2 support
 Summary:	Desktop organizer application for PalmOS devices
 Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.5
-Release:	1
+Release:	2
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
@@ -17,6 +19,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
 BuildRequires:	gtk+-devel >= 1.2.0
+BuildRequires:  gtk+2-devel >= 2.0.3
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -47,7 +50,8 @@ rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
-%configure
+%configure \
+	%{!?_without_gtk2: --enable-gtk2}
 
 %{__make}
 
