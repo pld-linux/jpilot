@@ -7,7 +7,7 @@ Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.7
-Release:	3
+Release:	4
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
@@ -15,6 +15,7 @@ Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}.png
 Patch0:		%{name}-locale-names.patch
+Patch1:		%{name}_other.v0_99_7.diff
 URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -44,6 +45,7 @@ Um software para interação com o Pilot.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 mv -f po/{no,nb}.po
 rm -f po/stamp-po
