@@ -6,12 +6,12 @@ Summary:	Desktop organizer application for PalmOS devices
 Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
-Version:	0.99.5
-Release:	2
+Version:	0.99.6
+Release:	1
 License:	GPL
 Group:		X11/Applications
-Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
-# Source0-md5:	6ee51e69838c826c4ed8fd42ef12cc59
+Source0:	http://downloads.jpilot.org/%{name}-%{version}.tar.gz
+# Source0-md5:	1572138321ce6759c65ecf83b8c84ef4
 Source1:	%{name}.desktop
 Source2:	%{name}.png
 Patch0:		%{name}-configure.patch
