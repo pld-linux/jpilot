@@ -31,7 +31,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 J-Pilot is a desktop organizer application for the PalmOS devices that
-runs under Linux with plugins support. It is similar in functionality 
+runs under Linux with plugins support. It is similar in functionality
 to the original Palm Desktop software.
 
 %description -l pl
