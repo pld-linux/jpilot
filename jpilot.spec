@@ -36,7 +36,7 @@ Um software para interação com o Pilot.
 %setup -q
 
 %build
-gettextize --copy --force
+%{__gettextize}
 %configure
 %{__make}
 %{__make} jpilot-dump
