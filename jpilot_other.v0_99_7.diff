@@ -1,0 +1,465 @@
+Common subdirectories: jpilot-0.99.7/dialer and jpilot-0.99.7.new/dialer
+Common subdirectories: jpilot-0.99.7/docs and jpilot-0.99.7.new/docs
+Common subdirectories: jpilot-0.99.7/empty and jpilot-0.99.7.new/empty
+Common subdirectories: jpilot-0.99.7/Expense and jpilot-0.99.7.new/Expense
+Common subdirectories: jpilot-0.99.7/icons and jpilot-0.99.7.new/icons
+Common subdirectories: jpilot-0.99.7/intl and jpilot-0.99.7.new/intl
+diff -uN jpilot-0.99.7/jpilot.c jpilot-0.99.7.new/jpilot.c
+--- jpilot-0.99.7/jpilot.c	2004-03-01 02:09:03.000000000 +0200
++++ jpilot-0.99.7.new/jpilot.c	2004-10-13 00:16:20.000000000 +0200
+@@ -1746,6 +1746,10 @@
+    pref_init();
+    /* read jpilot.rc file for preferences */
+    pref_read_rc_file();
++   if (otherconv_init() != 0) {
++     printf("Error: could not set encoding\n");
++     return 1;
++   }
+ 
+    w = h = x = y = bit_mask = 0;
+ 
+@@ -2318,5 +2322,7 @@
+    
+    gtk_main();
+ 
++   otherconv_free();
++
+    return 0;
+ }
+diff -uN jpilot-0.99.7/jpilot-sync.c jpilot-0.99.7.new/jpilot-sync.c
+--- jpilot-0.99.7/jpilot-sync.c	2004-02-21 06:17:28.000000000 +0200
++++ jpilot-0.99.7.new/jpilot-sync.c	2004-10-13 00:16:20.000000000 +0200
+@@ -79,6 +79,10 @@
+ 
+    pref_init();
+    pref_read_rc_file();
++   if (otherconv_init()!=0) {
++	 printf("Error: could not set encoding\n");
++	 return 1;
++   }
+ 
+    pipe_from_parent=STDIN_FILENO;
+    pipe_to_parent=STDOUT_FILENO;
+@@ -211,6 +215,7 @@
+       sleep(1);
+    } while(loop);
+ 
++   otherconv_free();
+    return 0;
+ }
+ 
+Common subdirectories: jpilot-0.99.7/KeyRing and jpilot-0.99.7.new/KeyRing
+Common subdirectories: jpilot-0.99.7/m4 and jpilot-0.99.7.new/m4
+diff -uN jpilot-0.99.7/Makefile.am jpilot-0.99.7.new/Makefile.am
+--- jpilot-0.99.7/Makefile.am	2004-03-01 01:10:24.000000000 +0200
++++ jpilot-0.99.7.new/Makefile.am	2004-10-13 00:16:20.000000000 +0200
+@@ -34,6 +34,8 @@
+ 	cp1250.h \
+ 	cp1253.c \
+ 	cp1253.h \
++	otherconv.c \
++	otherconv.h \
+ 	dat.c \
+ 	datebook.c \
+ 	datebook.h \
+@@ -95,6 +97,7 @@
+ 	category.c \
+ 	cp1250.c \
+ 	cp1253.c \
++	otherconv.c \
+ 	datebook.c \
+ 	japanese.c \
+ 	jpilot-dump.c \
+@@ -114,6 +117,7 @@
+ jpilot_sync_SOURCES = \
+ 	cp1250.c \
+ 	cp1253.c \
++	otherconv.c \
+ 	category.c \
+ 	jpilot-sync.c \
+ 	japanese.c \
+diff -uN jpilot-0.99.7/Makefile.in jpilot-0.99.7.new/Makefile.in
+--- jpilot-0.99.7/Makefile.in	2004-02-29 01:19:48.000000000 +0200
++++ jpilot-0.99.7.new/Makefile.in	2004-10-13 00:20:46.000000000 +0200
+@@ -69,7 +69,7 @@
+ PROGRAMS = $(bin_PROGRAMS)
+ am_jpilot_OBJECTS = address.$(OBJEXT) address_gui.$(OBJEXT) \
+ 	alarms.$(OBJEXT) category.$(OBJEXT) cp1250.$(OBJEXT) \
+-	cp1253.$(OBJEXT) dat.$(OBJEXT) datebook.$(OBJEXT) \
++	cp1253.$(OBJEXT) otherconv.$(OBJEXT) dat.$(OBJEXT) datebook.$(OBJEXT) \
+ 	datebook_gui.$(OBJEXT) dayview.$(OBJEXT) dialer.$(OBJEXT) \
+ 	export_gui.$(OBJEXT) import_gui.$(OBJEXT) \
+ 	install_gui.$(OBJEXT) japanese.$(OBJEXT) jpilot.$(OBJEXT) \
+@@ -83,14 +83,14 @@
+ jpilot_OBJECTS = $(am_jpilot_OBJECTS)
+ jpilot_DEPENDENCIES =
+ am_jpilot_dump_OBJECTS = address.$(OBJEXT) category.$(OBJEXT) \
+-	cp1250.$(OBJEXT) cp1253.$(OBJEXT) datebook.$(OBJEXT) \
++	cp1250.$(OBJEXT) cp1253.$(OBJEXT) otherconv.$(OBJEXT) datebook.$(OBJEXT) \
+ 	japanese.$(OBJEXT) jpilot-dump.$(OBJEXT) libplugin.$(OBJEXT) \
+ 	log.$(OBJEXT) memo.$(OBJEXT) password.$(OBJEXT) \
+ 	plugins.$(OBJEXT) prefs.$(OBJEXT) russian.$(OBJEXT) \
+ 	todo.$(OBJEXT) utils.$(OBJEXT)
+ jpilot_dump_OBJECTS = $(am_jpilot_dump_OBJECTS)
+ jpilot_dump_DEPENDENCIES =
+-am_jpilot_sync_OBJECTS = cp1250.$(OBJEXT) cp1253.$(OBJEXT) \
++am_jpilot_sync_OBJECTS = cp1250.$(OBJEXT) cp1253.$(OBJEXT) otherconv.$(OBJEXT) \
+ 	category.$(OBJEXT) jpilot-sync.$(OBJEXT) japanese.$(OBJEXT) \
+ 	libplugin.$(OBJEXT) log.$(OBJEXT) password.$(OBJEXT) \
+ 	plugins.$(OBJEXT) prefs.$(OBJEXT) russian.$(OBJEXT) \
+@@ -103,7 +103,7 @@
+ @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/address.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/address_gui.Po ./$(DEPDIR)/alarms.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/category.Po ./$(DEPDIR)/cp1250.Po \
+-@AMDEP_TRUE@	./$(DEPDIR)/cp1253.Po ./$(DEPDIR)/dat.Po \
++@AMDEP_TRUE@	./$(DEPDIR)/cp1253.Po ./$(DEPDIR)/otherconv.Po ./$(DEPDIR)/dat.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/datebook.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/datebook_gui.Po ./$(DEPDIR)/dayview.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/dialer.Po ./$(DEPDIR)/export_gui.Po \
+@@ -345,6 +345,8 @@
+ 	cp1250.h \
+ 	cp1253.c \
+ 	cp1253.h \
++	otherconv.c \
++	otherconv.h \
+ 	dat.c \
+ 	datebook.c \
+ 	datebook.h \
+@@ -406,6 +408,7 @@
+ 	category.c \
+ 	cp1250.c \
+ 	cp1253.c \
++	otherconv.c \
+ 	datebook.c \
+ 	japanese.c \
+ 	jpilot-dump.c \
+@@ -422,6 +425,7 @@
+ jpilot_sync_SOURCES = \
+ 	cp1250.c \
+ 	cp1253.c \
++	otherconv.c \
+ 	category.c \
+ 	jpilot-sync.c \
+ 	japanese.c \
+@@ -564,6 +568,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/category.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cp1250.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cp1253.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/otherconv.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dat.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datebook.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datebook_gui.Po@am__quote@
+diff -uN jpilot-0.99.7/otherconv.c jpilot-0.99.7.new/otherconv.c
+--- jpilot-0.99.7/otherconv.c	1970-01-01 02:00:00.000000000 +0200
++++ jpilot-0.99.7.new/otherconv.c	2004-10-13 00:16:48.000000000 +0200
+@@ -0,0 +1,165 @@
++/*
++ * General charset conversion library (using gconv)
++ * Convert Palm  <-> Unix:
++ * Palm : Any - according to the "other-pda-charset" setup option.
++ * Unix : UTF-8
++ */
++
++#include "config.h"
++#include <stdio.h>
++#include <errno.h>
++#include <stdlib.h>
++#include <glib.h>
++/* To speed up compilation use these instead of glib.h
++#include <glib/gmacros.h>
++#include <glib/gconvert.h>
++*/
++#include "prefs.h"
++#include "otherconv.h"
++#include "log.h"
++
++static GIConv glob_topda = NULL;
++static GIConv glob_frompda = NULL;
++
++#define HOST_CS "UTF-8"
++
++/*
++ * strnlen is not ANSI. 
++ * To avoid messing with conflicting declarations, I just implement my own version.
++ * (this is easy & portable might not be very efficient) -- Amit Aronovitch
++ */
++G_INLINE_FUNC size_t oc_strnlen(const unsigned char *s, size_t maxlen) {
++  const unsigned char *p,*endp;
++  
++  endp = s+maxlen;
++  for (p=s;p<endp;++p) if (! *p) break;
++  return p-s;
++}
++
++void oc_free_iconv(char *funcname, GIConv conv, char *convname) {
++  if (conv != NULL) {
++    if (g_iconv_close(conv) != 0) {
++      jp_logf(JP_LOG_WARN, "%s: error exit from g_iconv_close(%s)\n",
++	      funcname,convname);
++    }
++  }
++}
++
++#define OC_FREE_ICONV(conv) oc_free_iconv(G_GNUC_FUNCTION, conv,#conv)
++
++/*
++ * Module initialization function
++ *  Call this before any conversion routine.
++ *  Can also be used if you want to reread the 'other-pda-charset' option
++ *
++ * Returns 0 if OK, -1 if iconv could not be initialized
++ *  (probably because of bad charset string)
++ */
++
++int otherconv_init() {
++  const char *pref_charset;
++  get_pref(PREF_OTHER_PDA_CHARSET, NULL, &pref_charset);
++  
++  /* (re)open the "to" iconv */
++  OC_FREE_ICONV(glob_topda);
++  glob_topda = g_iconv_open(pref_charset, HOST_CS);
++  if (glob_topda == (GIConv)(-1)) return -1;
++  
++  /* (re)open the "from" iconv */
++  OC_FREE_ICONV(glob_frompda);
++  glob_frompda = g_iconv_open(HOST_CS, pref_charset);
++  if (glob_frompda == (GIConv)(-1)) {
++    OC_FREE_ICONV(glob_topda);
++    return -1;
++  }
++  return 0;
++}
++
++/*
++ * Module finalization function
++ * closes the iconvs
++ */
++void otherconv_free() {
++  OC_FREE_ICONV(glob_topda);
++  OC_FREE_ICONV(glob_frompda);
++}
++
++/*
++ *           Conversion to UTF using g_convert_with_iconv
++ *     A new buffer is now allocated and the old one remains unchanged
++ */
++unsigned char *other_to_UTF(const unsigned char *buf, int buf_len)
++{
++  size_t rc;
++  char *outbuf;
++  gsize out_len;
++  GError *err = NULL;
++  
++  jp_logf(JP_LOG_DEBUG, G_GNUC_FUNCTION ": reset iconv state...\n");
++  rc = g_iconv(glob_frompda, NULL, NULL, NULL, NULL);
++  jp_logf(JP_LOG_DEBUG, G_GNUC_FUNCTION ": converting   [%s]\n", buf);
++  
++  outbuf = (char *)g_convert_with_iconv((gchar *)buf, oc_strnlen(buf,buf_len), glob_frompda,
++					NULL, &out_len, &err);
++  if (err != NULL) {
++      jp_logf(JP_LOG_WARN, G_GNUC_FUNCTION ": g_convert_with_iconv error: %s\n",
++	      err->message);
++      g_error_free(err);
++  }
++  
++  jp_logf(JP_LOG_DEBUG, G_GNUC_FUNCTION ": converted to [%s]\n", outbuf);
++  
++  /*
++   * Note: outbuf was allocated by glib, so should be freed with g_free
++   * To be 100% safe, I should have done strncpy to a new malloc-allocated string.
++   * (at least under an 'if (!g_mem_is_system_malloc())' test)
++   *
++   * However, unless you replace the default GMemVTable, freeing with C free should be fine
++   *  so I decided this is not worth the overhead  -- Amit Aronovitch
++   */
++  return outbuf;
++}
++
++/*
++ *           Conversion to pda encoding using g_iconv
++ *     The conversion is performed inplace
++ *
++ *  Note: this should work only as long as output is guarenteed to be shorter
++ *  than input - otherwise iconv might do unexpected stuff.
++ */
++void UTF_to_other(unsigned char *const buf, int buf_len)
++{
++  gsize inleft,outleft;
++  gchar *inptr, *outptr;
++  size_t rc;
++  char *errstr;
++  
++  jp_logf(JP_LOG_DEBUG, G_GNUC_FUNCTION ": reset iconv state...\n");
++  rc = g_iconv(glob_topda, NULL, NULL, NULL, NULL);
++  jp_logf(JP_LOG_DEBUG, G_GNUC_FUNCTION ": converting   [%s]\n", buf);
++  
++  inleft = oc_strnlen(buf,buf_len);
++  outleft = buf_len-1;
++  inptr = outptr = buf;
++  
++  rc = g_iconv(glob_topda, &inptr, &inleft, &outptr, &outleft);
++  *outptr = 0;
++  if (rc<0) {
++    switch (errno) {
++    case EILSEQ:
++      errstr = G_GNUC_FUNCTION ": iconv: unconvertable sequence at place %d\n";
++      break;
++    case EINVAL:
++      errstr = G_GNUC_FUNCTION ": iconv: incomplete UTF-8 sequence at place %d\n";
++      break;
++    case E2BIG:
++      errstr = G_GNUC_FUNCTION ": iconv: buffer filled. stopped at place %d\n";
++      break;
++    default:
++      errstr = G_GNUC_FUNCTION ": iconv: unexpected error at place %d\n";
++    }
++    jp_logf(JP_LOG_WARN, errstr, ((unsigned char *)inptr)-buf);
++  }
++  
++  jp_logf(JP_LOG_DEBUG, G_GNUC_FUNCTION ": converted to [%s]\n", buf);
++}
+diff -uN jpilot-0.99.7/otherconv.h jpilot-0.99.7.new/otherconv.h
+--- jpilot-0.99.7/otherconv.h	1970-01-01 02:00:00.000000000 +0200
++++ jpilot-0.99.7.new/otherconv.h	2004-10-13 00:16:48.000000000 +0200
+@@ -0,0 +1,19 @@
++/*
++ * General charset conversion library header (using gconv)
++ * Convert Palm  <-> Unix:
++ * Palm : Any - according to the "other-pda-charset" setup option.
++ * Unix : UTF-8
++ */
++
++/* otherconv_init: Call this before any conversion 
++ * (also use whenever other-pda-charset option changed) 
++ * 
++ * Returns 0 if OK, -1 if iconv could not be initialized
++ *  (probably because of bad charset string)
++ */
++int otherconv_init();
++/* otherconv_free: Call this when done */ 
++void otherconv_free(); 
++
++unsigned char *other_to_UTF(const unsigned char *buf, int buf_len);
++void UTF_to_other(unsigned char *const buf, int buf_len);
+Common subdirectories: jpilot-0.99.7/po and jpilot-0.99.7.new/po
+diff -uN jpilot-0.99.7/prefs.c jpilot-0.99.7.new/prefs.c
+--- jpilot-0.99.7/prefs.c	2004-02-23 05:54:05.000000000 +0200
++++ jpilot-0.99.7.new/prefs.c	2004-10-13 00:16:20.000000000 +0200
+@@ -108,6 +108,7 @@
+      {"last_todo_category", INTTYPE, INTTYPE, CATEGORY_ALL, NULL, 0},
+      {"last_memo_category", INTTYPE, INTTYPE, CATEGORY_ALL, NULL, 0},
+      {"version", CHARTYPE, CHARTYPE, 0, NULL, 0},
++     {"other-pda-charset", CHARTYPE, CHARTYPE, 0, NULL, 0},
+ };
+ 
+ struct name_list {
+@@ -148,6 +149,10 @@
+ 	 glob_prefs[i].svalue=strdup("jpilot-dial --lv 0 --rv 50 %n");
+ 	 glob_prefs[i].svalue_size=strlen(glob_prefs[i].svalue)+1;
+ 	 break;
++       case PREF_OTHER_PDA_CHARSET:
++	 glob_prefs[i].svalue=strdup("CP1255");
++	 glob_prefs[i].svalue_size=strlen(glob_prefs[i].svalue)+1;
++	 break;
+        default:
+ 	 glob_prefs[i].svalue=strdup("");
+ 	 glob_prefs[i].svalue_size=1;
+@@ -429,7 +434,8 @@
+       "Korean",
+       "Host UTF-8 <-> Palm Windows1250 (EE)",
+       "Host UTF-8 <-> Palm Windows1252", /* JPA */
+-      "Host UTF-8 <-> Palm Windows1253 (Greek)"
++      "Host UTF-8 <-> Palm Windows1253 (Greek)",
++      "Host UTF-8 <-> Palm Other (use iconv)"
+    };
+ 
+    static const char *paper_sizes[] = {
+diff -uN jpilot-0.99.7/prefs.h jpilot-0.99.7.new/prefs.h
+--- jpilot-0.99.7/prefs.h	2004-02-23 05:53:30.000000000 +0200
++++ jpilot-0.99.7.new/prefs.h	2004-10-13 00:16:20.000000000 +0200
+@@ -97,8 +97,9 @@
+ #define PREF_LAST_TODO_CATEGORY 73
+ #define PREF_LAST_MEMO_CATEGORY 74
+ #define PREF_VERSION 75
++#define PREF_OTHER_PDA_CHARSET 76
+ 
+-#define NUM_PREFS 76
++#define NUM_PREFS 77
+ 
+ #define MAX_PREF_NUM_BACKUPS 99
+ 
+@@ -116,7 +117,8 @@
+ #define CHAR_SET_1250UTF  7 /* Czech, Polish (Unix: UTF-8) */
+ #define CHAR_SET_LATINUTF 8 /* JPA : Latin European (Unix: UTF-8) */
+ #define CHAR_SET_1253UTF  9 /* Modern Greek (Palm: Windows 1253, Host: UTF-8) */
+-#define NUM_CHAR_SETS    10
++#define CHAR_SET_OTHERUTF  10 /* Other (Palm: Any (use iconv), Host: UTF-8) */
++#define NUM_CHAR_SETS    11
+ 
+ #define MAX_PREF_VALUE 200
+ 
+Common subdirectories: jpilot-0.99.7/SyncTime and jpilot-0.99.7.new/SyncTime
+diff -uN jpilot-0.99.7/utils.c jpilot-0.99.7.new/utils.c
+--- jpilot-0.99.7/utils.c	2004-02-22 00:46:07.000000000 +0200
++++ jpilot-0.99.7.new/utils.c	2004-10-13 00:16:20.000000000 +0200
+@@ -2274,6 +2274,7 @@
+        char_set == CHAR_SET_KOREAN || 
+        char_set == CHAR_SET_1250UTF ||
+        char_set == CHAR_SET_1253UTF ||
++       char_set == CHAR_SET_OTHERUTF ||
+        char_set == CHAR_SET_LATINUTF /* JPA */
+        ) {
+       char *p, *q;
+@@ -2316,6 +2317,7 @@
+        char_set == CHAR_SET_KOREAN || 
+        char_set == CHAR_SET_1250UTF ||
+        char_set == CHAR_SET_1253UTF ||
++       char_set == CHAR_SET_OTHERUTF ||
+        char_set == CHAR_SET_LATINUTF /* JPA */
+        ) {  /* Multibyte Charactors */
+       char *p, *q;
+@@ -2354,6 +2356,7 @@
+     case CHAR_SET_1251_B: win1251_to_koi8(buf, max_len); break;
+     case CHAR_SET_1250UTF: UTF2Win(buf,max_len); break;
+     case CHAR_SET_1253UTF: UTF_to_win1253(buf,max_len); break;
++    case CHAR_SET_OTHERUTF: UTF_to_other(buf,max_len); break;
+     case CHAR_SET_LATINUTF: UTF2Lat(buf,max_len); break;
+    }
+ }
+@@ -2398,6 +2401,7 @@
+     case CHAR_SET_1251_B : koi8_to_win1251(buf, max_len); break;
+     case CHAR_SET_1250UTF : newbuf = Win2UTF(buf, max_len); break;
+     case CHAR_SET_1253UTF : newbuf = win1253_to_UTF(buf, max_len); break;
++    case CHAR_SET_OTHERUTF : newbuf = other_to_UTF(buf, max_len); break;
+     case CHAR_SET_LATINUTF : newbuf = Lat2UTF(buf, max_len); break;
+     default : break;
+    }
+@@ -2424,7 +2428,8 @@
+    /* allocate a longer buffer if not done in conversion routine */
+    if ((char_set != CHAR_SET_1250UTF)
+        && (char_set != CHAR_SET_LATINUTF)
+-	   && (char_set != CHAR_SET_1253UTF)) {
++       && (char_set != CHAR_SET_1253UTF)
++       && (char_set != CHAR_SET_OTHERUTF)) {
+       newbuf = (unsigned char*)malloc(2*max_len - 1);
+       if (newbuf) {
+ 	 /* be safe, though string should fit into buf */
+@@ -2441,6 +2446,7 @@
+     case CHAR_SET_1251_B : koi8_to_win1251(newbuf, max_len); break;
+     case CHAR_SET_1250UTF : newbuf = Win2UTF(buf, max_len); break;
+     case CHAR_SET_1253UTF : newbuf = win1253_to_UTF(buf, max_len); break;
++    case CHAR_SET_OTHERUTF : newbuf = other_to_UTF(buf, max_len); break;
+     case CHAR_SET_LATINUTF : newbuf = Lat2UTF(buf, max_len); break;
+     default : break;
+    }
+diff -uN jpilot-0.99.7/utils.h jpilot-0.99.7.new/utils.h
+--- jpilot-0.99.7/utils.h	2004-02-21 06:22:24.000000000 +0200
++++ jpilot-0.99.7.new/utils.h	2004-10-13 00:16:20.000000000 +0200
+@@ -34,6 +34,7 @@
+ #include "japanese.h"
+ #include "cp1250.h"
+ #include "cp1253.h"
++#include "otherconv.h"
+ #include "russian.h"
+ 
+ #define PRINT_FILE_LINE printf("%s line %d\n", __FILE__, __LINE__)
