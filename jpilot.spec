@@ -22,6 +22,7 @@ BuildRequires:	automake
 BuildRequires:	gettext-devel
 %{?_with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
 %{!?_with_gtk1:BuildRequires:  gtk+2-devel >= 2.0.3}
+BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	pilot-link-devel >= 0.11.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
