@@ -1,17 +1,20 @@
 Summary:	Jpilot - Palm Pilot desktop software
-Summary(pl):	Program zarz±dzania Palm Pilot'em
+Summary(pl):	Program zarz±dzania Palm Pilotem
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.3
-Release:	1
+Release:	2
 License:	GPL
 Group:		X11/Applications
 Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}.png
 URL:		http://jpilot.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	gettext-devel
 BuildRequires:	gtk+-devel >= 1.2.0
+BuildRequires:	libtool
 BuildRequires:	pilot-link-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -25,8 +28,8 @@ distributes for a well known rampant legacy operating system.
 
 %description -l pl
 J-Pilot jest programem do zarz±dzania organizerami typu Palm Pilot dla
-Linux'a z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
-funkcjonalno¶æ do oryginalnego oprogramowania 3com'a dla Palm Pilota.
+Linuksa z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on±
+funkcjonalno¶æ do oryginalnego oprogramowania 3coma dla Palm Pilota.
 
 %description -l pt_BR
 Um software para interação com o Pilot.
@@ -37,7 +40,7 @@ Um software para interação com o Pilot.
 %build
 %{__gettextize}
 %{__libtoolize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 %{__automake}
 %configure
@@ -46,13 +49,13 @@ aclocal
 %{__make} jpilot-dump
 %{__make} libplugin
 
-(cd Expense
+cd Expense
 %configure
-%{__make}}
+%{__make}
 
-(cd SyncTime
+cd ../SyncTime
 %configure
-%{__make}}
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
