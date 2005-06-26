@@ -26,6 +26,7 @@ BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pilot-link-devel >= 0.11.5
+BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
