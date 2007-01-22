@@ -1,11 +1,11 @@
---- jpilot-0.99.7/configure.in.orig	Wed Jul 14 12:10:37 2004
-+++ jpilot-0.99.7/configure.in	Wed Jul 14 12:48:52 2004
-@@ -65,7 +65,7 @@
- AC_PROG_INTLTOOL
+--- jpilot-0.99.9/configure.in~	2007-01-23 00:52:45.601210838 +0200
++++ jpilot-0.99.9/configure.in	2007-01-23 00:54:24.763454750 +0200
+@@ -48,7 +48,7 @@
+ AC_PROG_INTLTOOL()
  
  dnl Set of available languages
--ALL_LINGUAS="ca cs da de es fr it ja nl no ru sv tr vi zh_CN zh_TW"
-+ALL_LINGUAS="ca cs da de es fr it ja nl nb ru sv tr vi zh_CN zh_TW"
+-ALL_LINGUAS="ca cs da de es fr it ja ko nl no ru rw sv tr uk vi zh_CN zh_TW"
++ALL_LINGUAS="ca cs da de es fr it ja ko nl nb ru rw sv tr uk vi zh_CN zh_TW"
  
  dnl AM_GNU_GETTEXT([])
  AM_GNU_GETTEXT([external])

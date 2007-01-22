@@ -6,26 +6,28 @@ Summary:	Desktop organizer application for PalmOS devices
 Summary(pl):	Organizer dla urz±dzeñ PalmOS
 Summary(pt_BR):	Software para interação com o Pilot
 Name:		jpilot
-Version:	0.99.7
-Release:	4
+Version:	0.99.9
+Release:	1
 License:	GPL
 Group:		X11/Applications
-Source0:	http://jpilot.org/%{name}-%{version}.tar.gz
-# Source0-md5:	11bb7236702e2e4c7e3d06372bdc9695
+# wget is banned, so use our df.
+# Source0Download:	http://jpilot.org/%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.gz
+# Source0-md5:	c39df29aeed57b84a674524856ebc290
 Source1:	%{name}.desktop
 Source2:	%{name}.png
 Patch0:		%{name}-locale-names.patch
-Patch1:		%{name}_other.v0_99_7.diff
+#PatchX:		%{name}_other.v0_99_7.diff
 URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-devel >= 0.16.1
 %{?with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
 %{!?with_gtk1:BuildRequires:	gtk+2-devel >= 1:2.0.3}
 BuildRequires:	intltool
 BuildRequires:	libtool
 BuildRequires:	openssl-devel >= 0.9.7d
-BuildRequires:	pilot-link-devel >= 0.11.5
+BuildRequires:	pilot-link-devel >= 0.11.2
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -46,7 +48,7 @@ Um software para interação com o Pilot.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+#%patchX -p1 # UPDATE or DROP
 
 mv -f po/{no,nb}.po
 rm -f po/stamp-po
@@ -55,16 +57,15 @@ rm -f po/stamp-po
 %{__perl} -pi -e 's@/lib/jpilot/plugins@/%{_lib}/jpilot/plugins@' */Makefile.am
 
 %build
-%{?with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK_2_0],[$3])' >> acinclude.m4}
-%{!?with_gtk1:echo 'AC_DEFUN([AM_PATH_GTK],[$3])' >> acinclude.m4}
 %{__gettextize}
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
+%{__autoheader}
 %{__automake}
 %configure \
 	ABILIB="%{_lib}" \
-	%{!?with_gtk1:--enable-gtk2}
+	%{?with_gtk1:--disable-gtk2}
 
 %{__make}
 
@@ -89,11 +90,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS BUGS UPGRADING README TODO icons docs/{*.png,*.jpg,*.html}
+%doc AUTHORS BUGS README TODO icons docs/{*.png,*.jpg,*.html}
 %attr(755,root,root) %{_bindir}/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so*
-#%{_datadir}/jpilot
+%{_datadir}/jpilot
 %{_mandir}/man1/*
 %{_desktopdir}/jpilot.desktop
