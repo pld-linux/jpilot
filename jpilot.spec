@@ -3,8 +3,8 @@
 %bcond_with	gtk1	# use GTK+ 1.2 instead of GTK+2
 #
 Summary:	Desktop organizer application for PalmOS devices
-Summary(pl):	Organizer dla urz±dzeñ PalmOS
-Summary(pt_BR):	Software para interação com o Pilot
+Summary(pl.UTF-8):   Organizer dla urzÄ…dzeÅ„ PalmOS
+Summary(pt_BR.UTF-8):   Software para interaÃ§Ã£o com o Pilot
 Name:		jpilot
 Version:	0.99.9
 Release:	1
@@ -37,13 +37,13 @@ J-Pilot is a desktop organizer application for the PalmOS devices that
 runs under Linux with plugins support. It is similar in functionality
 to the original Palm Desktop software.
 
-%description -l pl
-J-Pilot jest programem do zarz±dzania urz±dzeniami PalmOS dla Linuksa
-z mo¿liwo¶ci± dodawania wtyczek. Posiada zbli¿on± funkcjonalno¶æ do
+%description -l pl.UTF-8
+J-Pilot jest programem do zarzÄ…dzania urzÄ…dzeniami PalmOS dla Linuksa
+z moÅ¼liwoÅ›ciÄ… dodawania wtyczek. Posiada zbliÅ¼onÄ… funkcjonalnoÅ›Ä‡ do
 oryginalnego oprogramowania Palm Desktop.
 
-%description -l pt_BR
-Um software para interação com o Pilot.
+%description -l pt_BR.UTF-8
+Um software para interaÃ§Ã£o com o Pilot.
 
 %prep
 %setup -q
