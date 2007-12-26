@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=JPilot
 Comment=Jpilot - Palm Pilot desktop software
 Comment[es]=Jpilot pilot desktop software
@@ -7,7 +6,7 @@ Comment[ja]=Palm パイロットデスクトップ
 Comment[pl]=Program zarządzający Palm Pilotem
 Comment[pt]=Software para interação com o Pilot
 Comment[pt_BR]=Software para interação com o Pilot
-Icon=jpilot.png
+Icon=jpilot
 Exec=jpilot
 Terminal=false
 Type=Application
