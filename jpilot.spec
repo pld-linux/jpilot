@@ -7,7 +7,7 @@ Summary(pl.UTF-8):	Organizer dla urządzeń PalmOS
 Summary(pt_BR.UTF-8):	Software para interação com o Pilot
 Name:		jpilot
 Version:	0.99.9
-Release:	1
+Release:	2
 License:	GPL
 Group:		X11/Applications
 # wget is banned, so use our df.
