@@ -21,7 +21,7 @@ Patch0:		%{name}-locale-names.patch
 URL:		http://jpilot.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	gettext-devel >= 0.16.1
+BuildRequires:	gettext-tools >= 0.16.1
 %{?with_gtk1:BuildRequires:	gtk+-devel >= 1.2.0}
 %{!?with_gtk1:BuildRequires:	gtk+2-devel >= 1:2.0.3}
 BuildRequires:	intltool
