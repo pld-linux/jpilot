@@ -48,7 +48,7 @@ Um software para interação com o Pilot.
 %prep
 %setup -q
 %patch -P0 -p1
-#%patchX -p1 # UPDATE or DROP
+#%%patchX -p1 # UPDATE or DROP
 
 mv -f po/{no,nb}.po
 rm -f po/stamp-po
